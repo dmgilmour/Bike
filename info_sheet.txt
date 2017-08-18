@@ -1,0 +1,51 @@
+========================================
+CS/COE 1520 Assignment Information Sheet
+----------------------------------------
+
+You must submit an information sheet with every assignment. Also be sure
+to submit all materials following the procedures described on the
+submission procedures page.
+
+Name:  Dan Gilmour
+
+Lecture section:  MW 2:30 - 4:15
+
+Recitation day and time:  W 1:30
+
+Assignment #:  4
+
+Program due date:  9/1/2017
+
+Handed in date:  9/1/2017
+
+Source code file name(s):
+
+budget.py
+budget.html
+
+
+Does your project run without error?: Yes
+
+If not, what is/are the error(s) and which parts of your program run
+correctly?:
+
+
+
+
+
+
+
+Additional comments to the grader:
+
+I had some confusion on the requirement so here are the decisions I made:
+
+    Display monthly totals as selected by user in top selector
+    Only display the purchases for uncategorized purchases
+    Display the sum of all uncategorized as a category that you cannot remove and has no limit
+
+
+
+
+
+
+

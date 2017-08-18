@@ -1,0 +1,301 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <title>Dan's Budgeting Extravaganza!</title>
+
+        <script type = "text/javascript">
+
+            var categories = new Array();
+            var purchases = new Array();
+
+            function init() {
+                var submitPur = document.getElementById("submitPur");
+                submitPur.addEventListener("click", postPur, true);
+                var submitCat = document.getElementById("submitCat"); 
+                submitCat.addEventListener("click", postCat, true);
+                var selectMonth = document.getElementById("monthSelector");
+                selectMonth.addEventListener("change", populateCats);
+
+                getCat();
+            }
+
+            function get(address, storeOutput, doAfter) {
+
+                var httpRequest = new XMLHttpRequest();
+
+                httpRequest.onreadystatechange = function() {
+                    handleGet(httpRequest, storeOutput, doAfter);
+                };
+
+                httpRequest.open("GET", address);
+                httpRequest.send();
+            }
+
+            function handleGet(httpRequest, storeOutput, doAfter) {
+                if (httpRequest.readyState === XMLHttpRequest.DONE) {
+                    if (httpRequest.status === 200) {
+                        console.log(httpRequest.responseText);
+                        storeOutput(JSON.parse(httpRequest.responseText));
+                        doAfter();
+                    }
+                }
+            }
+
+            function getCat() {
+                get("/cats", storeCat, getPur);
+            }
+
+            function storeCat(valsToStore) {
+                categories = valsToStore;
+            }
+
+            function getPur() {
+                get("/purchases", storePur, populateCats);
+            }
+
+            function storePur(valsToStore) {
+                purchases = valsToStore;
+            }
+
+            function post(address, message, doAfter) {
+                var httpRequest = new XMLHttpRequest();
+
+                httpRequest.onreadystatechange = function() { handlePost(httpRequest, doAfter) };
+
+                httpRequest.open("POST", address);
+                httpRequest.setRequestHeader("Content-Type", "application/json");
+                console.log(JSON.stringify(message));
+                httpRequest.send(JSON.stringify(message));
+            }
+
+            function handlePost(httpRequest, doAfter) {
+                if (httpRequest.readyState === XMLHttpRequest.DONE) {
+                    if (httpRequest.status === 200) {
+                        console.log(httpRequest.responseText);
+                        doAfter();
+                    }
+                }
+            } 
+
+            function displayCats(cat) {
+                var table = document.getElementById("dansCategoryExtravaganza");
+                var entry = table.insertRow();
+
+                addCell(entry, cat.name);
+                addCell(entry, "$" + cat.current + " / $" + cat.limit);
+                var delButton = document.createElement("button");
+                delButton.value = cat.name;
+                delButton.addEventListener("click", function() {
+                    deleteCat(event.target.value);
+                });
+                var text = document.createTextNode("Delete");
+                delButton.appendChild(text);
+                entry.append(delButton);
+            }
+
+            function displayUncategorized(amount) {
+                var table = document.getElementById("dansCategoryExtravaganza");
+                var entry = table.insertRow();
+
+                addCell(entry, "Uncategorized");
+                addCell(entry, "$" + amount);
+            }
+
+            function displayPurs(pur) {
+                var table = document.getElementById("dansPurchaseExtravaganza");
+                var entry = table.insertRow();
+
+                addCell(entry, pur.name);
+                addCell(entry, "$" + pur.amount);
+                addCell(entry, pur.date);
+                addCell(entry, pur.cat);
+            }
+
+            function populateCats() {
+                clearTable(document.getElementById("dansCategoryExtravaganza"));
+                clearTable(document.getElementById("dansPurchaseExtravaganza"));
+                var monthSelector = document.getElementById("monthSelector");
+                var desiredMonth = monthSelector.value;
+
+                clearSelect(monthSelector);
+
+                purchases = purchases.sort(function(a, b) {
+                    return a.date.localeCompare(b.date);
+                });
+
+                var monthList = new Array();
+                if (purchases.length > 0) {
+                    monthList.push(parseMonth(purchases[0].date));
+
+                    purchases.forEach(function(pur) {
+                        if (parseMonth(pur.date) !== monthList[monthList.length - 1]) {
+                            monthList.push(parseMonth(pur.date));
+                        }
+                    });
+
+                    if (desiredMonth == "") {
+                        desiredMonth = monthList[0];
+                    }
+                }
+
+                monthList.forEach(function(month) {
+                    var option = document.createElement("option");
+                    option.value = month;
+                    option.innerHTML = month;
+                    if (month == desiredMonth) {
+                        option.selected = "selected";
+                    }
+                    monthSelector.appendChild(option);
+                });
+
+                var filterPurchases = purchases.filter(function(pur) {
+                    return parseMonth(pur.date) === desiredMonth;
+                });
+                categories.forEach(function(cat) {
+                    cat.current = 0;
+                    filterPurchases = filterPurchases.filter(function(pur) {
+                        if (pur.cat == cat.name) {
+                            cat.current += pur.amount;
+                            return false;
+                        } else {
+                            return true;
+                        }
+                    });
+                });
+
+                var uncategorized = 0;
+                filterPurchases.forEach(function(pur) {
+                    displayPurs(pur);
+                    uncategorized += pur.amount;
+                });
+
+                categories.forEach(function(cat) {
+                    displayCats(cat);
+                });
+
+                displayUncategorized(uncategorized);
+            }
+
+
+            function clearTable(table) {
+                while (table.rows.length > 0) {
+                    table.deleteRow(0);
+                }
+            }
+
+            function clearSelect(selector) {
+                selector.innerHTML = "";
+            }
+
+                
+
+            function addCell(entry, text) {
+                cell = entry.insertCell();
+                textNode = document.createTextNode(text);
+                cell.appendChild(textNode);
+            } 
+
+            function parseMonth(dateString) {
+                return dateString.substring(0, dateString.length - 3);
+            }
+
+            function postCat() {
+                var category = {
+                        name    : document.getElementById("catName").value,
+                        limit   : document.getElementById("catLimit").value
+                }
+
+                post("/cats", category, getCat);
+            }
+
+
+            function postPur() {
+                var purchase = {
+                        name        : document.getElementById("purName").value,
+                        amount      : parseFloat(document.getElementById("purAmount").value),
+                        category    : document.getElementById("purCat").value,
+                        date        : document.getElementById("purDate").value
+                }
+
+                post("/purchases", purchase, getPur);
+            }
+
+            function deleteCat(cat) {
+
+                var httpRequest = new XMLHttpRequest();
+
+                httpRequest.onreadystatechange = function() {
+                    handlePost(httpRequest, getCat);
+                };
+
+                httpRequest.open("DELETE", "/cats/" + cat);
+                httpRequest.send();
+            }
+
+
+            window.addEventListener("load", init, true);
+
+        </script>
+
+    </head>
+
+    <body>
+        <h1>Dan's Budgeting Extravaganza!!!</h1>
+
+        <br>
+
+        <h3>Month to display for:</h3>
+        <select id="monthSelector"></select>
+
+        <br>
+
+        <h2>Categories</h2>
+        <table>
+            <thead>
+                <td><b>Category</b></td>
+                <td><b>Amount Spent</b></td>
+
+            </thead>
+            <tbody id="dansCategoryExtravaganza"></tbody>
+        </table>
+
+        <br>
+
+        New Category:
+        <br>
+        <input type="text" id="catName" placeholder="Category Name"></input>
+        <br>
+        <input type="text" id="catLimit" placeholder="Monthly Cap"></input>
+        <br>
+        <input type="button" id="submitCat" value="Submit"></input>
+        <br>
+
+
+        <br>
+
+        <h2>Uncategorized Purchases</h2>
+        <table>
+            <thead>
+                <td><b>Purchase</b></td>
+                <td><b>Price</b></td>
+                <td><b>Date</b></td>
+                <td><b>Category</b></td>
+            </thead>
+            <tbody id="dansPurchaseExtravaganza"></tbody>
+        </table>
+
+        <br>
+        New Purchase:
+        <br>
+        <input type="text" id="purName" placeholder="Description"></input/>
+        <br>
+        <input type="number" id="purAmount" min="0" step=".01", placeholder="Amount"/></input>
+        <br>
+        <input type="text" id="purCat" placeholder="Category"></input>
+        <br>
+        <input type="date" id="purDate"></input>
+        <br>
+        <input type="button" id="submitPur" value="submit"></input>
+    </body>
+</html>
+

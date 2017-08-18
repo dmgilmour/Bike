@@ -1,1 +1,1 @@
-web: gunicorn budgeting:app --log-file=-
+web: gunicorn budget:app --log-file=-

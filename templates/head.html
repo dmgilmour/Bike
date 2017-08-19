@@ -1,0 +1,89 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Dan Gilmour</title>
+        <link href-"https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
+        <style>
+            html, body { 
+                height: 100%; 
+                color: black; 
+                background-color: white; 
+                font-family: 'Ubuntu'; 
+            }
+            .head {
+                justify-items: center;
+                align-items: bottom;
+                margin: 20px;
+                display: flex;
+                padding: 20px;
+            }
+            .name {
+                font-weight: bold;
+                font-size: 200%;
+            }
+            .red-button {
+                font-weight: bold;
+                background: white;
+                color: #AD2A1A;
+                border: none;
+                font-size: 150%;
+                margin-left: 50px;
+                line-height: 40px;
+                transition: all 0.5s;
+                text-decoration: none;
+                text-transform: uppercase;
+            }
+
+            .red-button:hover {
+                transition: 0.5s;
+                color: white;
+                background: #AD2A1A;
+                text-decoration: none;
+            }
+
+            .red-button-selected {
+                font-weight: bold;
+                background: #AD2A1A;
+                color: white;
+                border: none;
+                font-size: 150%;
+                margin-left: 50px;
+                line-height: 40px;
+                transition: all 0.5s;
+                text-decoration: none;
+                text-transform: uppercase;
+            }
+
+        </style>
+    </head>
+
+    <body>
+        <div class="head">
+            <div class="name">
+                Dan Gilmour
+            </div>
+            <b>
+                {% for page in pages %}
+                    {% if page == cur_page %}
+                        <button class ="red-button-selected">{{ page }}</button>
+                    {% else %}
+                        <button class ="red-button">{{ page }}</button>
+                    {% endif %}
+                {% endfor %}
+            </b>
+            <!-- Feature that says:
+                Hello <IP address>,
+                I'm Dan
+                Do you have a name?
+                <Box for name that will forever attach to that person>
+                And are you a friend, employer, professor, or something else?
+                Great, I'll remember you next time you come. Any message you send in this box goes directly to my phone, so just holler if you want to talk.
+                
+
+                Use ML to try to guess emotion through subtle interactions with the webpage like time per page, time on site, current tab, amount of clicking, what platform they're on, time of day, previous account history, etc. and give tailored feedback.
+            -->
+        </div>
+    </body>
+</html>
+

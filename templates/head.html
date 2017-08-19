@@ -23,6 +23,7 @@
                 font-size: 200%;
             }
             .red-button {
+                cursor: pointer;
                 font-weight: bold;
                 background: white;
                 color: #AD2A1A;
@@ -31,7 +32,6 @@
                 margin-left: 50px;
                 line-height: 40px;
                 transition: all 0.5s;
-                text-decoration: none;
                 text-transform: uppercase;
             }
 
@@ -51,7 +51,6 @@
                 margin-left: 50px;
                 line-height: 40px;
                 transition: all 0.5s;
-                text-decoration: none;
                 text-transform: uppercase;
             }
 
@@ -66,9 +65,9 @@
             <b>
                 {% for page in pages %}
                     {% if page == cur_page %}
-                        <button class ="red-button-selected">{{ page }}</button>
+                    <a href="/{{ page }}"><button class ="red-button-selected">{{ page }}</button></a>
                     {% else %}
-                        <button class ="red-button">{{ page }}</button>
+                    <a href="/{{ page }}"><button class ="red-button">{{ page }}</button></a>
                     {% endif %}
                 {% endfor %}
             </b>

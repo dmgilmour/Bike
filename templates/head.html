@@ -16,7 +16,7 @@
             }
             .head {
                 width: 100%;
-                padding: 20px;
+                padding: 40px;
                 z-index: 1;
                 position: fixed;
                 justify-items: center;
@@ -28,19 +28,23 @@
             }
             .name {
                 font-weight: bold;
-                font-size: 200%;
+                font-size: xx-large;
             }
-            .red-button {
+
+            .red-button, .red-button-selected {
                 cursor: pointer;
                 font-weight: bold;
-                background: white;
-                color: #AD2A1A;
                 border: none;
-                font-size: 150%;
+                font-size: x-large;
                 margin-left: 50px;
                 line-height: 40px;
                 transition: all 0.5s;
                 text-transform: uppercase;
+            }
+
+            .red-button {
+                background: white;
+                color: #AD2A1A;
             }
 
             .red-button:hover {
@@ -51,21 +55,15 @@
             }
 
             .red-button-selected {
-                font-weight: bold;
                 background: #AD2A1A;
                 color: white;
-                border: none;
-                font-size: 150%;
-                margin-left: 50px;
-                line-height: 40px;
-                transition: all 0.5s;
-                text-transform: uppercase;
             }
 
-            {% block style %}
-            {% endblock %}
-
         </style>
+
+        {% block style %}
+        {% endblock %}
+
     </head>
 
     <body>

@@ -1,0 +1,53 @@
+html, body { 
+    height: 100%; 
+    color: black; 
+    background-color: white; 
+    font-family: 'Ubuntu'; 
+}
+
+.head {
+    position: absolute;
+    height: 200px;
+    justify-items: center;
+    align-items: bottom;
+    margin: 20px;
+    display: flex;
+    padding: 20px;
+}
+
+.name {
+    font-weight: bold;
+    font-size: 200%;
+}
+
+.red-button {
+    cursor: pointer;
+    font-weight: bold;
+    background: white;
+    color: #AD2A1A;
+    border: none;
+    font-size: 150%;
+    margin-left: 50px;
+    line-height: 40px;
+    transition: all 0.5s;
+    text-transform: uppercase;
+}
+
+.red-button:hover {
+    transition: 0.5s;
+    color: white;
+    background: #AD2A1A;
+    text-decoration: none;
+}
+
+.red-button-selected {
+    font-weight: bold;
+    background: #AD2A1A;
+    color: white;
+    border: none;
+    font-size: 150%;
+    margin-left: 50px;
+    line-height: 40px;
+    transition: all 0.5s;
+    text-transform: uppercase;
+}

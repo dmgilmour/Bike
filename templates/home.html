@@ -1,85 +1,64 @@
-<!DOCTYPE HTML>
-<html>
-    <head>
-        <meta charset="utf-8">
-        <title>Dan Gilmour</title>
-        <link href-"https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
-        <style>
-            html, body { 
-                height: 100%; 
-                color: black; 
-                background-color: white; 
-                font-family: 'Ubuntu'; 
-            }
-            .head {
-                justify-items: center;
-                align-items: bottom;
-                margin: 20px;
-                display: flex;
-                padding: 20px;
-            }
-            .name {
-                font-weight: bold;
-                font-size: 200%;
-            }
-            .red-button {
-                font-weight: bold;
-                background: white;
-                color: #AD2A1A;
-                border: none;
-                font-size: 150%;
-                margin-left: 50px;
-                line-height: 40px;
-                transition: all 0.5s;
-                text-decoration: none;
-            }
+{% extends "head.html" %}
 
-            .red-button:hover {
-                transition: 0.5s;
-                color: white;
-                background: #AD2A1A;
-                text-decoration: none;
-            }
+    {% set pages=pages %}
+    {% set cur_page=cur_page %}
 
-            .red-button-selected {
-                font-weight: bold;
-                background: #AD2A1A;
-                color: white;
-                border: none;
-                font-size: 150%;
-                margin-left: 50px;
-                line-height: 40px;
-                transition: all 0.5s;
-                text-decoration: none;
-            }
+    {% block style %}
 
-        </style>
-    </head>
+        .body {
+            position: absolute;
+            z-index: 0;
+            top: 60px;
+            color: black;
+            font-size: 100%;
+        }
 
-    <body>
-        <div class="head">
-            <div class="name">
-                Dan Gilmour
-            </div>
-            <b>
-            <button class="red-button-selected">ABOUT</button>
-            <button class="red-button">PROJECTS</button>
-            <button class="red-button">READINGS</button>
-            <button class="red-button">BLOG</button>
-            <button class="red-button">EMPLOYERS</button>
-            </b>
-            <!-- Feature that says:
-                Hello <IP address>,
-                I'm Dan
-                Do you have a name?
-                <Box for name that will forever attach to that person>
-                And are you a friend, employer, professor, or something else?
-                Great, I'll remember you next time you come. Any message you send in this box goes directly to my phone, so just holler if you want to talk.
-                
+    {% endblock %}
 
-                Use ML to try to guess emotion through subtle interactions with the webpage like time per page, time on site, current tab, amount of clicking, what platform they're on, time of day, previous account history, etc. and give tailored feedback.
-            -->
-        </div>
-    </body>
-</html>
+    {% block content %}
+    <div class="body">
+    <p>
+    <br>
+    <br>
+    <br>
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed iaculis massa vitae diam ultrices eleifend. Vestibulum elementum id purus lacinia rutrum. Phasellus pharetra arcu in ligula dapibus maximus. Aliquam faucibus est nec rutrum varius. Curabitur ut nisl dictum, blandit augue quis, volutpat leo. Nulla hendrerit nisi lacinia lobortis consequat. Sed porttitor, nunc id ornare ultricies, leo enim pharetra quam, a suscipit lorem nisl in nunc.
+
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+        Maecenas id iaculis lorem. Proin sed consectetur turpis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur dapibus dolor at nunc dictum, non mollis odio posuere. Phasellus ultrices porta elit quis placerat. Nulla interdum enim eu mollis consectetur. Vivamus quis pulvinar risus. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Quisque vehicula pharetra magna eu imperdiet.
+
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+        Vivamus in efficitur quam. Ut euismod eleifend dolor, id efficitur nibh. Praesent sed ligula nec justo ornare semper at quis urna. Aliquam mattis lobortis erat sit amet eleifend. Vestibulum efficitur est in augue sodales venenatis. Sed finibus sapien diam, in malesuada diam molestie nec. Sed eu purus dolor.
+
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+        Phasellus at elit arcu. Aenean iaculis nisi ac odio fermentum accumsan. Pellentesque eget massa non libero vehicula condimentum. Mauris eget dolor et urna rutrum scelerisque. Mauris fermentum eget libero a venenatis. Morbi vestibulum, lorem at convallis accumsan, augue enim laoreet sapien, sodales varius lacus leo molestie mauris. Suspendisse volutpat et nisi in molestie. Etiam semper lorem non libero aliquam tempus. Praesent sit amet justo quis velit efficitur interdum porta varius lacus. Integer vestibulum laoreet tellus, a venenatis lorem tincidunt ut. Integer nulla elit, lacinia in consectetur ut, maximus vel sapien. Pellentesque in neque eget sem accumsan tincidunt eu non dui. Nullam efficitur magna venenatis lorem auctor, vel dignissim sem viverra.
+
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+        Etiam in enim nunc. Sed dolor sapien, convallis quis risus congue, volutpat feugiat libero. Aliquam dui sapien, maximus eget dictum eget, vehicula id odio. Aliquam et justo ut odio pellentesque lobortis. Fusce efficitur nibh ut sem vestibulum, et euismod tellus dignissim. Proin in commodo massa. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Duis nec pretium massa, sit amet fermentum elit. 
+    <br>
+    <br>
+    <br>
+        </p>
+    </div>
+    {% endblock %}
+
 

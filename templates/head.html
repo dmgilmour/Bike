@@ -4,19 +4,27 @@
         <meta charset="utf-8">
         <title>Dan Gilmour</title>
         <link href-"https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
+
         <style>
             html, body { 
                 height: 100%; 
                 color: black; 
+                margin: 0;
+                padding: 0;
                 background-color: white; 
                 font-family: 'Ubuntu'; 
             }
             .head {
+                width: 100%;
+                padding: 20px;
+                z-index: 1;
+                position: fixed;
                 justify-items: center;
                 align-items: bottom;
-                margin: 20px;
                 display: flex;
-                padding: 20px;
+                background: white;
+                border-bottom-style: solid;
+                border-bottom-width: 1px;
             }
             .name {
                 font-weight: bold;
@@ -54,23 +62,25 @@
                 text-transform: uppercase;
             }
 
+            {% block style %}
+            {% endblock %}
+
         </style>
     </head>
 
     <body>
+        {% block banner %}
         <div class="head">
             <div class="name">
                 Dan Gilmour
             </div>
-            <b>
                 {% for page in pages %}
                     {% if page == cur_page %}
-                    <a href="/{{ page }}"><button class ="red-button-selected">{{ page }}</button></a>
+                    <a href="/{{ page }}"><button class ="red-button-selected"><b>{{ page }}</b></button></a>
                     {% else %}
-                    <a href="/{{ page }}"><button class ="red-button">{{ page }}</button></a>
+                    <a href="/{{ page }}"><button class ="red-button"><b>{{ page }}</b></button></a>
                     {% endif %}
                 {% endfor %}
-            </b>
             <!-- Feature that says:
                 Hello <IP address>,
                 I'm Dan
@@ -83,6 +93,11 @@
                 Use ML to try to guess emotion through subtle interactions with the webpage like time per page, time on site, current tab, amount of clicking, what platform they're on, time of day, previous account history, etc. and give tailored feedback.
             -->
         </div>
+        {% endblock %}
+
+        {% block content %}
+        ayyo
+        {% endblock %}
     </body>
 </html>
 

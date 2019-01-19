@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Dan's vim trash
 
 .*.sw?
@@ -108,3 +109,7 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+=======
+# Ignore vim trash
+*.sw?
+>>>>>>> 2fd6302fc84cbf3f5130d724b623e95fbba2d103

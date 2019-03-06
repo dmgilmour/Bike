@@ -28,20 +28,46 @@
       // This example adds a marker to indicate the position of Bondi Beach in Sydney,
       // Australia.
 
+      var map;
+      var markers = [];
+
       function initMap() {
         console.log("init map");
-        var map = new google.maps.Map(document.getElementById('map'), {
+        map = new google.maps.Map(document.getElementById('map'), {
           zoom: 4,
           center: {lat: -33, lng: 151}
         });
 
         var image = 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png';
-        var beachMarker = new google.maps.Marker({
-          position: {lat: -33.890, lng: 151.274},
-          map: map,
-          icon: image
-        });
         getLocation();
+        retreiveLoc();
+      }
+
+      function retreiveLoc() {
+        var httpRequest = new XMLHttpRequest();
+        httpRequest.onreadystatechange = function() {
+          if (this.readyState == 4 && this.status == 200) {
+            var myArr = JSON.parse(this.responseText);
+            displayLoc(myArr);
+          }
+        }
+        httpRequest.open("GET", "/data/user");
+        httpRequest.send();
+
+
+      }
+
+      function displayLoc(data) {
+        console.log(data);
+        console.log(data.length);
+        markers = []
+        var i;
+        for (i = 0; i < data.length; i++) {
+          markers.push(new google.maps.Marker({
+            position: {lat: parseFloat(data[i][0]), lng: parseFloat(data[i][1])},
+            map: map
+          }));
+        }
       }
 
       function getLocation() {

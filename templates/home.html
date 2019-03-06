@@ -221,6 +221,11 @@
           }
         }
       }
+
+      window.setInterval(function() {
+        retreiveLoc();
+        getLocation();
+      }, 1000);
     </script>
 
     <script async defer

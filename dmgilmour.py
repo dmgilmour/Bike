@@ -109,6 +109,8 @@ def trackdata():
 @app.route("/data/user", methods = ["GET", "POST"])
 def userdata():
     if request.method == "GET":
+        time_boundary = datetime.datetime.now() - datetime.timedelta(minutes=1)
+        l = Location.query.filter(Location.time >= time_boundary)
         l = Location.query.all()
         loc_list = [[i.lat, i.lon] for i in l]
         return jsonify(loc_list)

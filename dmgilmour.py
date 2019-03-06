@@ -149,3 +149,15 @@ def userdata():
         """
         
         return redirect(url_for("home"))
+
+
+@app.route("/sw/", methods=["POST"])
+def sw():
+    data=request.get_json()
+    print(data['sw'])
+
+
+@app.route("/sw.js")
+def swjs():
+    print("visited")
+    return app.send_static_file('sw.js')

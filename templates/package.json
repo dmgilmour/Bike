@@ -1,0 +1,29 @@
+{
+  "name": "track",
+  "version": "1.0.0",
+  "description": "1st take",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/dmgilmour/bike.git"
+  },
+  "author": "DAn",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dmgilmour/bike/issues"
+  },
+  "homepage": "https://github.com/dmgilmour/bike#readme",
+  "dependencies": {
+    "react": "^16.8.1",
+    "webpack": "^4.29.2",
+    "webpack-dev-server": "^3.1.14"
+  },
+  "devDependencies": {},
+  "keywords": [
+    "track",
+    "temp"
+  ]
+}

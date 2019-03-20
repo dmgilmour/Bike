@@ -103,10 +103,11 @@ def login():
     
     if request.method == "POST":
         username = request.form["user"]
-        u = algo.get_user(username)
-        if u != None:
-            user = u[0]
-            salt = user[2]
+        user = algo.get_user(username)
+        if user != None:
+            username = user[0]
+            salt = user[2].encode('utf-8')
+            print(salt)
             combopass = (request.form["pass"] + salt + master_secret_key).encode('utf-8')
             password = bcrypt.hashpw(combopass, salt)
             if password == user[1]:
@@ -133,7 +134,6 @@ def signup():
             combopass = (request.form["pass"] + salt + master_secret_key).encode('utf-8')
             password = bcrypt.hashpw(combopass, salt)
             algo.dbWrite_user(username, password, salt)
-            print(db.session.query.filter_by(username=username).first())
             message = "New user added"
         else:
             message = "Username already in use"
@@ -227,3 +227,6 @@ def logged_in():
     else:
         return False
 
+
+
+app.secret_key = "Senor Design"

@@ -103,16 +103,13 @@ def login():
     
     if request.method == "POST":
         username = request.form["user"]
-        l = User.query.all()
-        a = [b for b in l if b.username == username]
-        print(a)
-        if len(a) != 0:
-            user = a[0]
-        # TODO DYLAN: replace the above line with a query that sets `user = a user going by username`
-            salt = user.salt # TODO DYLAN lookup the salt for the corresponding user
+        u = algo.get_user(username)
+        if u != None:
+            user = u[0]
+            salt = user[2]
             combopass = (request.form["pass"] + salt + master_secret_key).encode('utf-8')
             password = bcrypt.hashpw(combopass, salt)
-            if password == user.password: # TODO DYLAN change this to check the passwor
+            if password == user[1]:
                 session["user"] = username
                 return redirect(url_for("home"))
             else:
@@ -131,16 +128,11 @@ def signup():
 
     if request.method == "POST":
         username = request.form["user"].encode('utf-8')
-        print(username)
-        # TODO DYlAN replace everything after 'not' with a check if username in database
-        print(User.query.filter_by(username=request.form["user"]).all())
-        if len(a) == 0:
+        if algo.get_user(username) == None:
             salt = bcrypt.gensalt().encode('utf-8')
             combopass = (request.form["pass"] + salt + master_secret_key).encode('utf-8')
             password = bcrypt.hashpw(combopass, salt)
-            # TODO add a new user with username username, password password, and salt salt, you may need to add salt as a column but it is necessary. after than get rid of the next two lines
-            db.session.add(User(username, password, salt))
-            db.session.commit()
+            algo.dbWrite_user(username, password, salt)
             print(db.session.query.filter_by(username=username).first())
             message = "New user added"
         else:

@@ -54,9 +54,9 @@ class Algo(object):
         else:
                 return [1, conf] #print("Lesser")
 
-    def select_from_window(self, stringWindowStart, stringWindowEnd):
+    def select_from_window(self, stringWindowStart, stringWindowEnd, user):
         sql = "SELECT * FROM sensorData WHERE dataID IN (SELECT dataID FROM sensorData WHERE TIME(pullTime) > %s AND TIME(pullTime) < %s) AND user = %s"
-        vals = (stringWindowStart, stringWindowEnd, 'testUser')
+        vals = (stringWindowStart, stringWindowEnd, user)
         self._mycursor.execute(sql, vals)
         result = self._mycursor.fetchall()
 
@@ -75,40 +75,47 @@ class Algo(object):
         return [covarMat, meanLon, meanLat]
 
 
-    def time_slice(self, meanLon, meanLat, stringWindowStart, stringWindowEnd):
-        firstSelect = self.select_from_window(stringWindowStart, stringWindowEnd)
+    def time_slice(self, meanLon, meanLat, stringWindowStart, stringWindowEnd, user):
+        firstSelect = self.select_from_window(stringWindowStart, stringWindowEnd, user)
         firstMeans = [[float(firstSelect[1])], [float(firstSelect[2])]]
         meanArr = [[meanLon], [meanLat]]
         firstConfidence = self.mvn_confidence(60, firstMeans, firstSelect[0], meanArr)
 
         return firstConfidence
 		
-	def dbWrite_location(self, dataID, user, coordX, coordY, accel, orient):
-	    sql = "INSERT INTO sensorData VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
-	    pullTime = datetime.now() + timedelta(minutes=(1*dataID))
-	    dayInt = pullTime.weekday()
-	    if(dayInt == 0):
+    def dbWrite_location(self, dataID, user, coordX, coordY, accel, orient):
+        sql = "INSERT INTO sensorData VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
+        pullTime = datetime.now() + timedelta(minutes=(1*dataID))
+        dayInt = pullTime.weekday()
+        if(dayInt == 0):
             day = 'Monday'
-	    elif(dayInt == 1):
+        elif(dayInt == 1):
             day = 'Tuesday'
-		elif (dayInt == 2):
-			day = 'Wednesday'
-		elif (dayInt == 3):
-			day = 'Thursday'
-		elif (dayInt == 4):
-			day = 'Friday'
-		elif (dayInt == 5):
-			day = 'Saturday'
-		elif (dayInt == 6):
-			day = 'Sunday'
-		val = (dataID, user, -1,  coordX, coordY, accel, orient, pullTime, day)
-		mycursor.execute(sql, val)
-		mydb.commit()
-	
-	def dbWrite_user(self, userID, password):
-	    sql = "INSERT INTO users VALUES (%s, %s)"
-		hashPass = password
-		val = (userID, hashPass)
-		mycursor.execute(sql, val)
-		mydb.commit()
-		
+        elif (dayInt == 2):
+            day = 'Wednesday'
+        elif (dayInt == 3):
+            day = 'Thursday'
+        elif (dayInt == 4):
+            day = 'Friday'
+        elif (dayInt == 5):
+            day = 'Saturday'
+        elif (dayInt == 6):
+            day = 'Sunday'
+        val = (dataID, user, -1,  coordX, coordY, accel, orient, pullTime, day)
+        self._mycursor.execute(sql, val)
+        self._mydb.commit()
+
+    def dbWrite_user(self, userID, password, salt):
+        sql = "INSERT INTO users VALUES (%s, %s, %s)"
+        val = (userID, password, salt)
+        self._mycursor.execute(sql, val)
+        self._mydb.commit()
+
+    def get_user(self, username):
+        sql = "SELECT * FROM users WHERE user = %s"
+        vals = (username,)
+        self._mycursor.execute(sql, vals)
+
+        result = self._mycursor.fetchall()
+        for row in result:
+            return row

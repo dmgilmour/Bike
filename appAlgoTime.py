@@ -55,8 +55,8 @@ class Algo(object):
                 return [1, conf] #print("Lesser")
 
     def select_from_window(self, stringWindowStart, stringWindowEnd):
-        sql = "SELECT * FROM sensorData WHERE dataID IN (SELECT dataID FROM sensorData WHERE TIME(pullTime) > %s AND TIME(pullTime) < %s)"
-        vals = (stringWindowStart, stringWindowEnd)
+        sql = "SELECT * FROM sensorData WHERE dataID IN (SELECT dataID FROM sensorData WHERE TIME(pullTime) > %s AND TIME(pullTime) < %s) AND user = %s"
+        vals = (stringWindowStart, stringWindowEnd, 'testUser')
         self._mycursor.execute(sql, vals)
         result = self._mycursor.fetchall()
 
@@ -82,3 +82,33 @@ class Algo(object):
         firstConfidence = self.mvn_confidence(60, firstMeans, firstSelect[0], meanArr)
 
         return firstConfidence
+		
+	def dbWrite_location(self, dataID, user, coordX, coordY, accel, orient):
+	    sql = "INSERT INTO sensorData VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
+	    pullTime = datetime.now() + timedelta(minutes=(1*dataID))
+	    dayInt = pullTime.weekday()
+	    if(dayInt == 0):
+            day = 'Monday'
+	    elif(dayInt == 1):
+            day = 'Tuesday'
+		elif (dayInt == 2):
+			day = 'Wednesday'
+		elif (dayInt == 3):
+			day = 'Thursday'
+		elif (dayInt == 4):
+			day = 'Friday'
+		elif (dayInt == 5):
+			day = 'Saturday'
+		elif (dayInt == 6):
+			day = 'Sunday'
+		val = (dataID, user, -1,  coordX, coordY, accel, orient, pullTime, day)
+		mycursor.execute(sql, val)
+		mydb.commit()
+	
+	def dbWrite_user(self, userID, password):
+	    sql = "INSERT INTO users VALUES (%s, %s)"
+		hashPass = password
+		val = (userID, hashPass)
+		mycursor.execute(sql, val)
+		mydb.commit()
+		

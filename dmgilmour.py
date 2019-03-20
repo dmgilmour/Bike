@@ -219,7 +219,7 @@ def swjs():
 
 def logged_in():
     if "user" in session:
-        if not User.query.filter_by(name=session["user"]).first():
+        if not get_user(name=session["user"]):
             session.clear()
             return False 
         else:

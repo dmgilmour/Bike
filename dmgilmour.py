@@ -13,29 +13,7 @@ from flask import Flask, request, abort, url_for, redirect, session, render_temp
 
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///chat.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db = SQLAlchemy(app)
 algo = Algo()
-
-"""
-class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    ip = db.column(db.String(30))
-    loc_list = db.relationship("Location", backref="user", lazy="dynamic")
-
-    def __init__(self, ip):
-        self.ip = ip
-"""
-
-"""
-class Bike(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    loc_list = db.relationship("Location", backref="bike", lazy="dynamic")
-
-    def __init__(self, ip):
-        self.ip = ip
-"""
 
 
 

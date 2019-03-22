@@ -5,9 +5,9 @@ from numpy import linalg
 from datetime import datetime
 from datetime import timedelta
 # import matplotlib.pyplot as plt
-import scipy.stats
-from scipy.stats import f
-from scipy.stats import multivariate_normal
+# import scipy.stats
+# from scipy.stats import f
+# from scipy.stats import multivariate_normal
 # from mpl_toolkits.mplot3d import Axes3D
 
 
@@ -34,6 +34,11 @@ class Algo(object):
 
 
     def mvn_confidence(self, pop, means, covarMat, newMeans):
+        return [0, 0]
+
+
+
+        """
         meanDiffMat = [[means[0][0] - newMeans[0][0]], [means[1][0] - newMeans[1][0]]]
         #print("Heck: ", meanDiffMat)
         matMultOne = np.matmul(np.transpose(meanDiffMat), np.linalg.inv(covarMat))
@@ -53,6 +58,7 @@ class Algo(object):
                 return [0, conf] #print("Greater")
         else:
                 return [1, conf] #print("Lesser")
+        """
 
     def select_from_window(self, stringWindowStart, stringWindowEnd, user):
         sql = "SELECT * FROM sensorData WHERE dataID IN (SELECT dataID FROM sensorData WHERE TIME(pullTime) > %s AND TIME(pullTime) < %s) AND user = %s"
@@ -76,12 +82,17 @@ class Algo(object):
 
 
     def time_slice(self, meanLon, meanLat, stringWindowStart, stringWindowEnd, user):
+        return 0
+
+
+        """
         firstSelect = self.select_from_window(stringWindowStart, stringWindowEnd, user)
         firstMeans = [[float(firstSelect[1])], [float(firstSelect[2])]]
         meanArr = [[meanLon], [meanLat]]
         firstConfidence = self.mvn_confidence(60, firstMeans, firstSelect[0], meanArr)
 
         return firstConfidence
+        """
 		
     def dbWrite_location(self, dataID, user, coordX, coordY, accel, orient):
         sql = "INSERT INTO sensorData VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"

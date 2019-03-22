@@ -161,8 +161,12 @@ def trackdata():
     data = request.get_json()
     lat = data['lat']
     lon = data['lon']
-    print(lat, lon, request.remote_addr)
-    return redirect(url_for("home"))
+    if lat and lon:
+        if lat != 0 and lon != 0:
+            print(lat, lon, request.remote_addr)
+            return("200 Success!")
+    else:
+        return("302 Invalid Request")
 
 @app.route("/data/user", methods = ["GET", "POST"])
 def userdata():
@@ -219,7 +223,7 @@ def swjs():
 
 def logged_in():
     if "user" in session:
-        if not get_user(name=session["user"]):
+        if not algo.get_user(session["user"]):
             session.clear()
             return False 
         else:

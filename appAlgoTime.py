@@ -4,11 +4,11 @@ import numpy as np
 from numpy import linalg
 from datetime import datetime
 from datetime import timedelta
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 import scipy.stats
 from scipy.stats import f
 from scipy.stats import multivariate_normal
-from mpl_toolkits.mplot3d import Axes3D
+# from mpl_toolkits.mplot3d import Axes3D
 
 
 class Algo(object):

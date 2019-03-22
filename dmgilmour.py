@@ -12,14 +12,14 @@ from appAlgoTime import Algo
 from flask import Flask, request, abort, url_for, redirect, session, render_template, flash, jsonify
 from flask_sqlalchemy import SQLAlchemy
 
+
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///chat.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 algo = Algo()
-master_secret_key = getpass('Senor Design')
 
-ip_list = []
+master_secret_key = 'Senor Design'
 
 """
 class User(db.Model):

@@ -98,9 +98,10 @@ class Algo(object):
         return firstConfidence
         """
 		
-    def dbWrite_location(self, dataID, user, coordX, coordY, accel, orient):
+    def dbWrite_location(self, user, coordX, coordY, accel, orient):
         sql = "INSERT INTO sensorData VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
         pullTime = datetime.now() + timedelta(minutes=(1*dataID))
+		dataID = self.get_next_ID('d')
         dayInt = pullTime.weekday()
         if(dayInt == 0):
             day = 'Monday'

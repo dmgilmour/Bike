@@ -204,7 +204,7 @@ class Algo(object):
         for row in result:
             return row[0]
 
-    def new_point(self, new_x, new_y):
+    def group_point(self, new_x, new_y):
         sql = "SELECT * FROM clusters"
         self._mycursor.execute(sql)
         result = self._mycursor.fetchall()
@@ -230,6 +230,7 @@ class Algo(object):
             self._mycursor.execute(sql, vals)
             self._mydb.commit()
             self.cluster_calc(closestID)
+			return 0
         else:
             variences = self.average_var()
             var_x_avg = variences[0]
@@ -243,3 +244,24 @@ class Algo(object):
             vals = (nextID,)
             self._mycursor.execute(sql, vals)
             self._mydb.commit()
+			return 1
+	
+	def point_process(self, user, bike, lon, lat, accel, time, delta):
+	    g_resp = 0
+		
+		windowStart = time - timedelta(minutes=delta)
+		windowEnd = time + timedelta(minutes=delta)
+		
+	    self.dbWrite_location(user, lon, lat, accel, 0)
+	    if(accel < stationary_threshold):
+		    g_resp = self.group_point(lon, lat)
+		
+		t_resp = self.time_slice(lon, lat, windowStart, windowEnd, user)
+		
+		if(t_resp[0] || g_resp)
+		    return true
+		
+		return false
+		
+		    
+	

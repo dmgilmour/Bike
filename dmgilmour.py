@@ -31,7 +31,7 @@ def login():
             username = user[0]
             salt = user[2].encode('utf-8')
             print(salt)
-            combopass = (request.form["pass"] + salt).encode('utf-8')
+            combopass = (request.form["pass"] + salt).decode('utf-8')
             password = bcrypt.hashpw(combopass, salt)
             if password == user[1]:
                 session["user"] = username

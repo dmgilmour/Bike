@@ -31,7 +31,7 @@ def login():
             username = user[0]
             salt = user[2].encode('utf-8')
             print(salt)
-            combopass = (request.form["pass"] + salt).decode('utf-8')
+            combopass = (request.form["pass"].encode('utf-8') + salt)
             password = bcrypt.hashpw(combopass, salt)
             if password == user[1]:
                 session["user"] = username
@@ -72,9 +72,6 @@ def home():
     
         #time_boundary = datetime.datetime.now() - datetime.timedelta(minutes=1)
         #l = Location.query.filter(Location.time >= time_boundary)
-        l = Location.query.all()
-        loc_list = [[i.lat, i.lon] for i in l]
-        print(loc_list)
 
         return render_template("home.html")
         # return render_template("home.html", bike_loc=bike_loc)

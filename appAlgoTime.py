@@ -1,8 +1,6 @@
 import mysql.connector
 import math
 import numpy as np
-import sqlConverter
-from sqlConverter import MySQLConverter
 from numpy import linalg
 from datetime import datetime
 from datetime import timedelta
@@ -31,7 +29,7 @@ class Algo(object):
 
     _mydb = None
     _mycursor = None
-    converter = MySQLConverter()
+    converter = NumpyMySQLConverter()
 
     def __init__(self):
 
@@ -143,7 +141,7 @@ class Algo(object):
         self._mydb.commit()
 
     def get_user_history(self, user):
-        sql = "SELECT coordX, coordY, time FROM sensorData WHERE user = %s"
+        sql = "SELECT coordX, coordY, pullTime FROM sensorData WHERE user = %s ORDER BY pullTime desc"
         val = (user,)
         self._mycursor.execute(sql, val)
         

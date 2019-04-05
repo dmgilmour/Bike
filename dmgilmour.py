@@ -82,10 +82,10 @@ def trackdata():
         lat = data['lat']
         lon = data['lon']
         # bike = data['id']
-        if data['time']:
-            time = data['time']
-        else:
-            time = datetime.datetime.now()
+        # if data['time']:
+        #     time = data['time']
+        # else:
+        time = datetime.datetime.now()
     except TypeError:
         return("406: incorrect format, accepts JSON for variables 'lat', 'lon', and 'id'")
     if lat and lon:
@@ -97,19 +97,26 @@ def trackdata():
 @app.route("/data/user", methods = ["GET", "POST"])
 def userdata():
     if request.method == "GET":
-        time_boundary = datetime.datetime.now() - datetime.timedelta(minutes=1)
 
-        return jsonify(loc_list)
+        user = session['user']
+        loc_list = algo.get_user_history(user)
+
+        data = {}
+        data['lat'] = 0 #loc_list[0][1]
+        data['lon'] = 0 #loc_list[0][0]
+
+        return json.dumps(data)
+        # return jsonify(loc_list)
 
     elif request.method == "POST":
         data = request.get_json()
         try:
             lat = data['lat']
             lon = data['lon']
-            if data['time']:
-                time = data['time']
-            else:
-                time = datetime.datetime.now()
+            #    if data['time']:
+            #    time = data['time']
+            #else:
+            time = datetime.datetime.now()
         except TypeError:
             return("406: incorrect format, accepts JSON for variables 'lat', 'lon', and 'time'")
         if session['user']:

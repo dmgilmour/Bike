@@ -12,6 +12,21 @@ from datetime import timedelta
 # from scipy.stats import multivariate_normal
 # from mpl_toolkits.mplot3d import Axes3D
 
+class NumpyMySQLConverter(mysql.connector.conversion.MySQLConverter):
+    """ A mysql.connector Converter that handles Numpy types """
+
+    def _float32_to_mysql(self, value):
+        return float(value)
+
+    def _float64_to_mysql(self, value):
+        return float(value)
+
+    def _int32_to_mysql(self, value):
+        return int(value)
+
+    def _int64_to_mysql(self, value):
+        return int(value)
+
 class Algo(object):
 
     _mydb = None

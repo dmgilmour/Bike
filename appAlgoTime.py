@@ -20,7 +20,7 @@ class Algo(object):
 
     def __init__(self):
 
-    	
+        
         self.PI = math.pi
 
         self._mydb = mysql.connector.connect(
@@ -97,11 +97,11 @@ class Algo(object):
 
         return firstConfidence
         """
-		
+                
     def dbWrite_location(self, user, coordX, coordY, accel, orient):
         sql = "INSERT INTO sensorData VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
         pullTime = datetime.now() + timedelta(minutes=(1*dataID))
-		dataID = self.get_next_ID('d')
+        dataID = self.get_next_ID('d')
         dayInt = pullTime.weekday()
         if(dayInt == 0):
             day = 'Monday'
@@ -126,6 +126,14 @@ class Algo(object):
         val = (userID, password, salt)
         self._mycursor.execute(sql, val)
         self._mydb.commit()
+
+    def get_user_history(self, user):
+        sql = "SELECT coordX, coordY, time FROM sensorData WHERE user = %s"
+        val = (user,)
+        self._mycursor.execute(sql, val)
+        
+        result = self._mycursor.fetchall()
+        return result
 
     def get_user(self, username):
         sql = "SELECT * FROM users WHERE user = %s"
@@ -230,7 +238,7 @@ class Algo(object):
             self._mycursor.execute(sql, vals)
             self._mydb.commit()
             self.cluster_calc(closestID)
-			return 0
+            return 0
         else:
             variences = self.average_var()
             var_x_avg = variences[0]
@@ -244,24 +252,24 @@ class Algo(object):
             vals = (nextID,)
             self._mycursor.execute(sql, vals)
             self._mydb.commit()
-			return 1
-	
-	def point_process(self, user, bike, lon, lat, accel, time, delta):
-	    g_resp = 0
-		
-		windowStart = time - timedelta(minutes=delta)
-		windowEnd = time + timedelta(minutes=delta)
-		
-	    self.dbWrite_location(user, lon, lat, accel, 0)
-	    if(accel < stationary_threshold):
-		    g_resp = self.group_point(lon, lat)
-		
-		t_resp = self.time_slice(lon, lat, windowStart, windowEnd, user)
-		
-		if(t_resp[0] || g_resp)
-		    return true
-		
-		return false
-		
-		    
-	
+        return 1
+        
+        def point_process(self, user, bike, lon, lat, accel, time, delta):
+            g_resp = 0
+                
+            windowStart = time - timedelta(minutes=delta)
+            windowEnd = time + timedelta(minutes=delta)
+                
+            self.dbWrite_location(user, lon, lat, accel, 0)
+            if (accel < stationary_threshold):
+                g_resp = self.group_point(lon, lat)
+                
+                t_resp = self.time_slice(lon, lat, windowStart, windowEnd, user)
+                
+                if (t_resp[0] or g_resp):
+                    return True
+                
+                return False
+                
+                    
+        

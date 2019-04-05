@@ -13,30 +13,7 @@ from flask import Flask, request, abort, url_for, redirect, session, render_temp
 
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///chat.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db = SQLAlchemy(app)
 algo = Algo()
-
-"""
-class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    ip = db.column(db.String(30))
-    loc_list = db.relationship("Location", backref="user", lazy="dynamic")
-
-    def __init__(self, ip):
-        self.ip = ip
-"""
-
-"""
-class Bike(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    loc_list = db.relationship("Location", backref="bike", lazy="dynamic")
-
-    def __init__(self, ip):
-        self.ip = ip
-"""
-
 
 
 @app.route("/login", methods = ["GET", "POST"])
@@ -94,9 +71,6 @@ def home():
     
         #time_boundary = datetime.datetime.now() - datetime.timedelta(minutes=1)
         #l = Location.query.filter(Location.time >= time_boundary)
-        l = Location.query.all()
-        loc_list = [[i.lat, i.lon] for i in l]
-        print(loc_list)
 
         return render_template("home.html")
         # return render_template("home.html", bike_loc=bike_loc)
@@ -107,7 +81,7 @@ def trackdata():
     try:
         lat = data['lat']
         lon = data['lon']
-        bike = data['id']
+        # bike = data['id']
         if data['time']:
             time = data['time']
         else:
@@ -124,9 +98,7 @@ def trackdata():
 def userdata():
     if request.method == "GET":
         time_boundary = datetime.datetime.now() - datetime.timedelta(minutes=1)
-        l = Location.query.filter(Location.time >= time_boundary)
-        l = Location.query.all()
-        loc_list = [[i.lat, i.lon] for i in l]
+
         return jsonify(loc_list)
 
     elif request.method == "POST":
@@ -146,32 +118,9 @@ def userdata():
             # log user data
 
 
-            ip = request.remote_addr
-            print(lat, lon, ip)
+            print(lat, lon)
                 # print(request.form["lat"] + request.form["lon"])
-            last_loc = Location.query.filter(Location.user_ip == ip).first()
-            if last_loc != None:
-                db.session.delete(last_loc)
-            db.session.add(Location(lat, lon, datetime.datetime.utcnow(), ip))
-            db.session.commit()
 
-            print(Location.query.order_by('-id').first().lat)
-
-        """
-        ips = [u.ip for u in User.query.all()]
-        print(ips)
-
-        if not (ip in ips):
-            print("new ip!")
-            db.session.add(User(ip))
-            db.session.commit()
-        else:
-            print("old ip")
-
-        ips2 = [u.ip for u in User.query.all()]
-        print(ips2)
-        """
-        
         return redirect(url_for("home"))
 
 

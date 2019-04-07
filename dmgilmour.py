@@ -81,15 +81,18 @@ def trackdata():
     try:
         lat = data['lat']
         lon = data['lon']
+        bikeid = data['id']
+        moving = data['moving']
+        battery = data['battery']
         # bike = data['id']
         # if data['time']:
         #     time = data['time']
         # else:
         time = datetime.datetime.now()
     except TypeError:
-        return("406: incorrect format, accepts JSON for variables 'lat', 'lon', and 'id'")
+        return("406: incorrect format, accepts JSON for variables 'lat', 'lon', 'id', 'moving', 'battery'")
     if lat and lon:
-        print(lat, lon, request.remote_addr)
+        print(lat, lon, bikeid, moving, battery)
         return("200 Success!")
     else:
         return("302 Invalid Request")

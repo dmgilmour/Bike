@@ -22,13 +22,10 @@
   </head>
 
   <body>
+    <button onclick="registerPrompt()">Register Tracker</button> 
+    <div id="menu"></div>
     <div id="map"></div>
     <script>
-
-      // This example adds a marker to indicate the position of Bondi Beach in Sydney,
-      // Australia.
-
-
 
 
     const applicationServerPublicKey = 'BOzb97H2yfaNrQo6XiOTt9SMYpABUYMikjNMxJ4SPSkl1vpe__b20kGa35UkjyYJswAlCXgdH9Tmj6rrPDGN71g';
@@ -133,6 +130,29 @@
 
 
       // SW End
+
+      // buttons
+
+      function registerPrompt() {
+         var idStr = window.prompt("Tracker ID");
+         if (idStr == null) {
+           return;
+         }
+         try {
+           id = parseInt(idStr);
+           check = parseFloat(idStr);
+         } catch(err) {
+           alert("Failed");
+         }
+         if (isNaN(id) || (id != check)) {
+           alert("Failed");
+         } else {
+           alert("Success");
+         }
+         // SEND THE ID TO FLASK 
+         
+      }
+      
 
       var map;
       var markers = [];

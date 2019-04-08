@@ -43,7 +43,7 @@ class Algo(object):
                 database="ssHistory"
         )
 
-        self._mycursor = self._mydb.cursor(buffered=True)
+        self._mycursor = self._mydb.cursor()
         self._mydb.set_converter_class(NumpyMySQLConverter)
 
     def f_lookup(self, n, p=2, conf=0.05):
@@ -211,6 +211,8 @@ class Algo(object):
             return 0
 
         for row in result:
+            if row[0] == None:
+                return 1
             return row[0] + 1
 
     def dist_to(self, x, y, x2, y2):

@@ -109,7 +109,7 @@ def trackdata():
         except TypeError:
             return("406: incorrect format, accepts JSON for variables 'lat', 'lon', 'id', 'moving', 'battery'")
         if lat and lon:
-            if(algo.point_process(session['user'], bikeid, lon, lat, moving, time, 120)):
+            if(algo.point_process('ayyo', bikeid, lon, lat, moving, time, 120)):
                 return("200: ALERT")
             else:
                 #return("200 Success!")
@@ -142,9 +142,9 @@ def userdata():
     if request.method == "GET":
 
         user = session['user']
-        loc_list = algo.get_user_history(user)
+        #loc_list = algo.get_user_history(user)
 
-        print (loc_list)
+        # print (loc_list)
 
         data = {}
         data['lat'] = 0 #loc_list[0][1]

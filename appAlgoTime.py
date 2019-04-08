@@ -43,7 +43,7 @@ class Algo(object):
                 database="ssHistory"
         )
 
-        self._mycursor = self._mydb.cursor()
+        self._mycursor = self._mydb.cursor(buffered=True)
         self._mydb.set_converter_class(NumpyMySQLConverter)
 
     def f_lookup(self, n, p=2, conf=0.05):
@@ -103,7 +103,7 @@ class Algo(object):
         return firstConfidence
                 
     def dbWrite_location(self, user, bikeID, coordX, coordY, accel, pullTime):
-        sql = "INSERT INTO sensorData VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
+        sql = "INSERT INTO sensorData VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
         dataID = self.get_next_ID('d')
         dayInt = pullTime.weekday()
         if(dayInt == 0):
@@ -197,10 +197,12 @@ class Algo(object):
         return [var_x_avg, var_y_avg]
 
     def get_next_ID(self, mode):
+        print(mode)
         if (mode == 'c'):
             sql = "SELECT MAX(CID) FROM clusters"
         elif (mode == 'd'):
             sql = "SELECT MAX(dataID) FROM sensorData"
+            
         elif (mode == 'b'):
             sql = "SELECT MAX(bike) FROM bikes"
         self._mycursor.execute(sql)
@@ -277,7 +279,7 @@ class Algo(object):
         windowEnd = time + timedelta(minutes=delta)
                 
         self.dbWrite_location(user, bike, lon, lat, accel, time)
-        if (accel < stationary_threshold):
+        if (True):
             g_resp = self.group_point(lon, lat)
                 
             t_resp = self.time_slice(lon, lat, windowStart, windowEnd, user)
@@ -286,4 +288,4 @@ class Algo(object):
                 return True
                 
             return False
-        return False
+        return True

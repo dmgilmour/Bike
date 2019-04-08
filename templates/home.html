@@ -150,6 +150,9 @@
            alert("Success");
          }
          // SEND THE ID TO FLASK 
+
+         sendData(JSON.stringify({"id" : id}), "/register", "register bike");
+
          
       }
       
@@ -179,9 +182,20 @@
         }
         httpRequest.open("GET", "/data/user");
         httpRequest.send();
-
-
       }
+
+      function getAlert() {
+        var httpRequest = new XMLHttpRequest();
+        httpRequest.onreadystatechange = function() {
+          if (this.readyState == 4 && this.status == 200) {
+            var alerto = JSON.parse(this.responseText);
+            displayAlert(alerto);
+          }
+        }
+        httpRequest.open("GET", "/alert");
+        httpRequest.send();
+      }
+
 
       function displayLoc(data) {
         console.log(data);
@@ -200,25 +214,30 @@
         }
       }
 
-      function getLocation() {
-        console.log("getting loc");
-        if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(sendLoc);
-        } 
+      function displayAlert(alerto) {
+        alert(alerto)
       }
 
 
-      function sendLoc(loc) {
 
-        console.log("sending loc");
+      function getLocation() {
+        console.log("getting loc");
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(handleSendLoc);
+        } 
+      }
+
+      function handleSendLoc(loc) {
+        sendData(JSON.stringify({"lat" : loc.coords.latitude, "lon" : loc.coords.longitude }), "data/user", "user location");
+      }
 
 
-        var lat = loc.coords.latitude;
-        var lon = loc.coords.longitude;
+      function sendData(data, where, whatData) {
 
+        if (data == undefined || where == undefined)
+
+        console.log("Sending data: ", whatData);
         var httpRequest = new XMLHttpRequest();
-
-
         
         if(!httpRequest) {
           console.err("httpRequest could not be created");
@@ -227,13 +246,16 @@
 
         // httpRequest.onreadystatechange = function() { handleSend(httpRequest, lat, lon) };
 
-        httpRequest.open("POST", "/data/user");
+        httpRequest.open("POST", where);
         httpRequest.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
-        httpRequest.send(JSON.stringify({ "lat": lat, "lon": lon }));
+        httpRequest.send(data);
       }
 
-      function handleSend(httpRequest, lat, lon) {
+      function handleSend(httpRequest) {
         if (httpRequest.readyState === XMLHttpRequest.DONE) {
+          if(httpRequest.responseText === "200: ALERT") {
+            alert("ayyo")
+          }
           if(httpRequest.status === 200) {
             console.log("data sent");
           } else {
@@ -242,10 +264,14 @@
         }
       }
 
+
+
       window.setInterval(function() {
         retreiveLoc();
         getLocation();
       }, 1000);
+
+
     </script>
 
     <script async defer

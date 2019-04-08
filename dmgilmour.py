@@ -75,27 +75,67 @@ def home():
         return render_template("home.html")
         # return render_template("home.html", bike_loc=bike_loc)
 
-@app.route("/data", methods = ["POST"])
-def trackdata():
+@app.route("/register", methods = ["POST"])
+def registerBike():
+
     data = request.get_json()
-    try:
-        lat = data['lat']
-        lon = data['lon']
-        bikeid = data['id']
-        moving = data['moving']
-        battery = data['battery']
-        # bike = data['id']
-        # if data['time']:
-        #     time = data['time']
-        # else:
-        time = datetime.datetime.now()
-    except TypeError:
-        return("406: incorrect format, accepts JSON for variables 'lat', 'lon', 'id', 'moving', 'battery'")
-    if lat and lon:
-        print(lat, lon, bikeid, moving, battery)
-        return("200 Success!")
-    else:
-        return("302 Invalid Request")
+    print("Register ID: ", data['id'])
+
+@app.route("/data", methods = ["GET", "POST"])
+def trackdata():
+
+    if request.method == "GET":
+        user = session['user']
+        #bikes = users(find user(get bikes(get most recent location)))
+        #return 
+
+    if request.method == "POST":
+        data = request.get_json()
+        try:
+            lat = data['lat']
+            lon = data['lon']
+            bikeid = data['id']
+
+            if 'moving' in data.keys():
+                moving = data['moving']
+            else:
+                moving = 0
+
+            if 'battery' in data.keys():
+                battery = data['battery']
+            else:
+                battery = -1
+            time = datetime.datetime.now()
+        except TypeError:
+            return("406: incorrect format, accepts JSON for variables 'lat', 'lon', 'id', 'moving', 'battery'")
+        if lat and lon:
+            if(algo.point_process(session['user'], bikeid, lon, lat, moving, time, 120)):
+                return("200: ALERT")
+            else:
+                #return("200 Success!")
+                return("200: ALERT")
+        else:
+            return("302 Invalid Request")
+
+"""
+@app.route("/alert/", methods = ["GET", "POST"])
+def get_alert():
+    if request.method == "GET":
+        if alerto:
+            data = []
+            data['alert'] = alerto
+            alerto = None
+            return json.dumps(data)
+    elif request.method == "POST":
+        data = request.get_json()
+        print(data['alert'])
+        alerto = data['alert']
+        return "200 ayyo"
+
+
+def alert(string):
+    alerto = string
+"""
 
 @app.route("/data/user", methods = ["GET", "POST"])
 def userdata():
@@ -103,6 +143,8 @@ def userdata():
 
         user = session['user']
         loc_list = algo.get_user_history(user)
+
+        print (loc_list)
 
         data = {}
         data['lat'] = 0 #loc_list[0][1]

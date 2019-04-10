@@ -37,7 +37,7 @@ class Algo(object):
         self.PI = math.pi
 
         self._mydb = mysql.connector.connect(
-                host="satellitesidecaruserhistory.c701a5j4aycw.us-east-1.rds.amazonaws.com",
+                host="designdbv2.cfzhptvfng6g.us-east-1.rds.amazonaws.com",
                 user="admin",
                 passwd="design2019",
                 database="ssHistory"
@@ -102,6 +102,20 @@ class Algo(object):
 
         return firstConfidence
                 
+    def ayyyyyyo(self, bikeid):
+        sql = "SELECT coordX, coordY, pullTime FROM sensorData WHERE bikeID = 0 ORDER BY pullTime desc"
+        #vals = (str(bikeid),)
+        self._mycursor.execute(sql)
+        result = self._mycursor.fetchall()
+        return result[0]
+
+    def new_bike(self, user, bikeID):
+        # nextBike = self.get_next_ID('b')
+        sql = "INSERT INTO bikes VALUES(%s, %s)"
+        vals = (user, bikeID)
+        self._mycursor.execute(sql, vals)
+        self._mydb.commit()
+
     def dbWrite_location(self, user, bikeID, coordX, coordY, accel, pullTime):
         sql = "INSERT INTO sensorData VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
         dataID = self.get_next_ID('d')

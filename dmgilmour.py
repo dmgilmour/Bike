@@ -78,16 +78,24 @@ def home():
 @app.route("/register", methods = ["POST"])
 def registerBike():
 
+    print("ayyo")
     data = request.get_json()
     print("Register ID: ", data['id'])
+    algo.new_bike(session['user'], data['id'])
 
 @app.route("/data", methods = ["GET", "POST"])
 def trackdata():
 
     if request.method == "GET":
-        user = session['user']
+        #ayy = algo.ayyyyyyo(0)
+        #print(ayy)
+        #user = session['user']
+        
         #bikes = users(find user(get bikes(get most recent location)))
-        #return 
+        data = {}
+        data['lat'] = 40.442791
+        data['lon'] = -79.955856
+        return json.dumps(data)
 
     if request.method == "POST":
         data = request.get_json()

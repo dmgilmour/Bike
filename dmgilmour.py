@@ -90,12 +90,17 @@ def trackdata():
     if request.method == "GET":
         #ayy = algo.ayyyyyyo(0)
         #print(ayy)
-        #user = session['user']
+
+        user = session['user']
         
         #bikes = users(find user(get bikes(get most recent location)))
+        """
         data = {}
         data['lat'] = 40.442791
         data['lon'] = -79.955856
+        """
+
+
         return json.dumps(data)
 
     if request.method == "POST":
@@ -118,6 +123,7 @@ def trackdata():
         except TypeError:
             return("406: incorrect format, accepts JSON for variables 'lat', 'lon', 'id', 'moving', 'battery'")
         if lat and lon:
+            print(lat, lon, bikeid, time, moving)
             if(algo.dbWrite_location('ayyo', bikeid, lon, lat, moving, time)):
                 return("200: ALERT")
             else:

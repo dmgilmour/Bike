@@ -39,7 +39,7 @@ class Algo(object):
         self._mydb = mysql.connector.connect(
                 host="designdbv2.cfzhptvfng6g.us-east-1.rds.amazonaws.com",
                 user="admin",
-                passwd="design2019",
+                passwd="AWS4SeniorDesign!",
                 database="ssHistory"
         )
 

@@ -40,7 +40,7 @@ class Algo(object):
                 host="designdbv2.cfzhptvfng6g.us-east-1.rds.amazonaws.com",
                 user="admin",
                 passwd="AWS4SeniorDesign!",
-                database="ssHistory"
+                database="designDBv2"
         )
 
         self._mycursor = self._mydb.cursor()

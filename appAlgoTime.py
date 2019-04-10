@@ -138,9 +138,9 @@ class Algo(object):
         self._mycursor.execute(sql, val)
         self._mydb.commit()
 
-    def dbWrite_user(self, userID, password, salt):
-        sql = "INSERT INTO users VALUES (%s, %s, %s)"
-        val = (userID, password, salt)
+    def dbWrite_user(self, userID, password, salt, newx, newy, time):
+        sql = "INSERT INTO users VALUES (%s, %s, %s, %s, %s, %s)"
+        val = (userID, password, salt, newx, newy, time)
         self._mycursor.execute(sql, val)
         self._mydb.commit()
 

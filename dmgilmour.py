@@ -52,10 +52,11 @@ def signup():
     if request.method == "POST":
         username = request.form["user"].encode('utf-8')
         if algo.get_user(username) == None:
-            salt = bcrypt.gensalt().encode('utf-8')
+            salt = bcrypt.gensalt()
             combopass = (request.form["pass"] + salt).encode('utf-8')
             password = bcrypt.hashpw(combopass, salt)
-            algo.dbWrite_user(username, password, salt)
+            
+            algo.dbWrite_user(username, password, salt, 0, 0, 0)
             message = "New user added"
         else:
             message = "Username already in use"

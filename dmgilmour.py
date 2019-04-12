@@ -109,7 +109,7 @@ def trackdata():
             lat = data['lat']
             lon = data['lon']
             bikeid = data['id']
-            # con = data['con']
+            con = data['con']
 
             if 'moving' in data.keys():
                 moving = data['moving']
@@ -124,7 +124,7 @@ def trackdata():
         except TypeError:
             return("406: incorrect format, accepts JSON for variables 'lat', 'lon', 'id', 'moving', 'battery'")
         if lat and lon:
-            print(lat, lon, bikeid, time, moving, battery)
+            print(lat, lon, bikeid, time, moving, battery, con)
             if(algo.dbWrite_location('ayyo', bikeid, lon, lat, moving, time)):
                 return("200: ALERT")
             else:

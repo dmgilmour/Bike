@@ -103,11 +103,11 @@ class Algo(object):
         return firstConfidence
                 
     def ayyyyyyo(self, bikeid):
-        sql = "SELECT coordX, coordY, pullTime FROM sensorData WHERE bikeID = 0 ORDER BY pullTime desc"
-        #vals = (str(bikeid),)
-        self._mycursor.execute(sql)
+        sql = "SELECT coordX, coordY, pullTime FROM sensorData WHERE bikeID = %s ORDER BY pullTime desc"
+        vals = (int(bikeid),)
+        self._mycursor.execute(sql, vals)
         result = self._mycursor.fetchall()
-        return result[0]
+        return result
 
     def new_bike(self, user, bikeID):
         # nextBike = self.get_next_ID('b')
@@ -116,8 +116,8 @@ class Algo(object):
         self._mycursor.execute(sql, vals)
         self._mydb.commit()
 
-    def dbWrite_location(self, user, bikeID, coordX, coordY, accel, pullTime):
-        sql = "INSERT INTO sensorData VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+    def dbWrite_location(self, user, bikeID, coordX, coordY, accel, pullTime, con):
+        sql = "INSERT INTO sensorData VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
         dataID = self.get_next_ID('d')
         dayInt = pullTime.weekday()
         if(dayInt == 0):
@@ -134,7 +134,7 @@ class Algo(object):
             day = 'Saturday'
         elif (dayInt == 6):
             day = 'Sunday'
-        val = (dataID, user, bikeID, -1,  coordX, coordY, accel, 0, pullTime, day)
+        val = (dataID, user, bikeID, -1,  coordX, coordY, accel, 0, pullTime, day, con)
         self._mycursor.execute(sql, val)
         self._mydb.commit()
 
@@ -160,6 +160,20 @@ class Algo(object):
         result = self._mycursor.fetchall()
         for row in result:
             return row
+
+    def get_bikes_by_user(self, username):
+        sql = "SELECT bike FROM bikes WHERE user = %s"
+        vals = (username,)
+        self._mycursor.execute(sql, vals)
+        result = self._mycursor.fetchall()
+        return result
+
+    def get_user_by_bike(self, bike):
+        sql = "SELECT user FROM bikes WHERE bike = %s"
+        vals = (bike,)
+        self._mycursor.execute(sql, vals)
+        result = self._mycursor.fetchall()
+        return result
 
     def cluster_calc(self, cluster_id):
         sql = "SELECT * FROM sensorData WHERE clusterID = %s"

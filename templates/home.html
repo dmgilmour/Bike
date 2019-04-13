@@ -158,13 +158,15 @@
       
 
       var map;
-      var markers = [];
+      var userMarkers = [];
+      var bikeMarkers = [];
+      var historyMarkers = [];
 
       function initMap() {
         console.log("init map");
         map = new google.maps.Map(document.getElementById('map'), {
-          zoom: 4,
-          center: {lat: -33, lng: 151}
+          zoom: 9,
+          center: {lat: 40.43, lng: -79.94}
         });
 
         var image = 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png';
@@ -172,15 +174,19 @@
         retreiveLoc();
       }
 
+      // get data to display on the map
       function retreiveLoc() {
         var httpRequest = new XMLHttpRequest();
         httpRequest.onreadystatechange = function() {
           if (this.readyState == 4 && this.status == 200) {
             var myArr = JSON.parse(this.responseText);
-            displayLoc(myArr);
+            console.log("Succesfully retrieved location data from /data")
+            displayBikes(myArr);
+          } else {
+            console.log("Error retrieving location data from /data")
           }
         }
-        httpRequest.open("GET", "/data/");
+        httpRequest.open("GET", "/data");
         httpRequest.send();
       }
 
@@ -196,8 +202,29 @@
         httpRequest.send();
       }
 
+      function clearBikeMarkers() {
+        bikeMarkers = [];
+      }
 
-      function displayLoc(data) {
+      function displayBikes(data) {
+        console.log("ayy");
+        clearBikeMarkers();
+        for (var i = 0; i < data.length; i++) {
+          console.log(data[i]);
+          displayBike(data[i]);
+        }
+      }
+
+      function displayBike(loc) {
+        bikeMarkers.push(new google.maps.Marker({
+          position: {lat: loc.lat, lng: loc.lon},
+          map: map
+        }));
+      }
+
+
+
+      function displayLocArr(data) {
         console.log(data);
         console.log(data.length);
         m = markers.length;
@@ -269,7 +296,7 @@
       window.setInterval(function() {
         retreiveLoc();
         getLocation();
-      }, 1000);
+      }, 10000);
 
 
     </script>

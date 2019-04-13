@@ -88,10 +88,18 @@ def registerBike():
 def trackdata():
 
     if request.method == "GET":
-        #ayy = algo.ayyyyyyo(0)
-        #print(ayy)
-
         user = session['user']
+        bikes = algo.get_bikes_by_user(user)
+        loc_list = []
+        for bike in bikes:
+            print(bike[0])
+            if bike[0] != None:
+                loc = algo.ayyyyyyo(bike[0])[0]
+                loc_list.append({'lat':loc[0], 'lon':loc[1]})
+
+        print(loc_list)
+        return json.dumps(loc_list)
+        #return json.dumps(loc_list)
         
         #bikes = users(find user(get bikes(get most recent location)))
         """
@@ -125,7 +133,7 @@ def trackdata():
             return("406: incorrect format, accepts JSON for variables 'lat', 'lon', 'id', 'moving', 'battery'")
         if lat and lon:
             print(lat, lon, bikeid, time, moving, battery, con)
-            if(algo.dbWrite_location('ayyo', bikeid, lon, lat, moving, time)):
+            if(algo.dbWrite_location('ayyo', bikeid, lon, lat, moving, time, con)):
                 return("200: ALERT")
             else:
                 #return("200 Success!")

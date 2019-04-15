@@ -30,7 +30,11 @@ def login():
             username = user[0]
             salt = user[2].encode('utf-8')
             print(salt)
-            combopass = (request.form["pass"] + salt).encode('utf-8')
+            try:
+                combopass = (request.form["pass"] + salt).encode('utf-8')
+            except TypeError:
+                combopass = (request.form["pass"] + salt)
+                
             password = bcrypt.hashpw(combopass, salt)
             if password == user[1]:
                 session["user"] = username
@@ -50,10 +54,17 @@ def signup():
         return redirect(url_for("home"))
 
     if request.method == "POST":
-        username = request.form["user"].encode('utf-8')
+        try:
+            username = request.form["user"].encode('utf-8')
+        except TypeError:
+            username = request.form["user"]
+
         if algo.get_user(username) == None:
             salt = bcrypt.gensalt()
-            combopass = (request.form["pass"] + salt).encode('utf-8')
+            try:
+                combopass = (request.form["pass"] + salt).encode('utf-8')
+            except TypeError:
+                combopass = (request.form["pass"] + salt)
             password = bcrypt.hashpw(combopass, salt)
             
             algo.dbWrite_user(username, password, salt, 0, 0, 0)

@@ -83,19 +83,29 @@ def registerBike():
     data = request.get_json()
     print("Register ID: ", data['id'])
     algo.new_bike(session['user'], data['id'])
+    return "200"
 
 @app.route("/data", methods = ["GET", "POST"])
 def trackdata():
 
+
+
     if request.method == "GET":
+        if 'user' not in session:
+            
+            return("401")
         user = session['user']
+        print("user: ", user)
         bikes = algo.get_bikes_by_user(user)
+        print("owned bikes: ", bikes)
         loc_list = []
         for bike in bikes:
-            print(bike[0])
-            if bike[0] != None:
-                loc = algo.ayyyyyyo(bike[0])[0]
-                loc_list.append({'lat':loc[0], 'lon':loc[1]})
+            if bike[0] != None and bike[0] > 0:
+                print("this bike: ", bike[0])
+                loc = algo.ayyyyyyo(bike[0])
+                print(len(loc))
+                if len(loc) > 0:
+                    loc_list.append({'lat':loc[0][1], 'lon':loc[0][0], 'id':bike[0]})
 
         print(loc_list)
         return json.dumps(loc_list)
@@ -133,7 +143,7 @@ def trackdata():
             return("406: incorrect format, accepts JSON for variables 'lat', 'lon', 'id', 'moving', 'battery'")
         if lat and lon:
             print(lat, lon, bikeid, time, moving, battery, con)
-            if(algo.dbWrite_location('ayyo', bikeid, lon, lat, moving, time, con)):
+            if(algo.dbWrite_location('ayyo', bikeid, lat, lon, moving, time, con)):
                 return("200: ALERT")
             else:
                 #return("200 Success!")
@@ -199,17 +209,39 @@ def userdata():
 
         return redirect(url_for("home"))
 
+@app.route("/data/history/<bike>", methods = ["GET", "POST"])
+def history(bike):
 
-@app.route("/sw/", methods=["POST"])
-def sw():
-    data=request.get_json()
-    print(data['sw'])
+    if request.method == "GET":
+        print("Getting History for Bike: ", bike)
+        loc_list = []
+        if bike != None:
+            loc_list = algo.get_bike_history(bike[0])
+
+        new_list = []
+        last_loc = None
+        top_id = 0
+        for loc in loc_list:
+            if loc[3] > top_id:
+                top_id = loc[3]
+            if last_loc == None or loc[0] != last_loc[0] or loc[1] != last_loc[1]:
+                new_list.append({'lat':loc[1], 'lon':loc[0], 'id':loc[3]})
+            last_loc = loc
+
+        print(len(loc_list))
+        print(len(new_list))
+        print("topid", top_id)
 
 
-@app.route("/sw.js")
-def swjs():
-    print("visited")
-    return app.send_static_file('sw.js')
+
+        return json.dumps(new_list)
+
+@app.route("/logout")
+def logout():
+    session.clear()
+    return redirect("login")
+
+
 
 def logged_in():
     if "user" in session:

@@ -103,7 +103,7 @@ class Algo(object):
         return firstConfidence
                 
     def ayyyyyyo(self, bikeid):
-        sql = "SELECT coordX, coordY, pullTime FROM sensorData WHERE bikeID = %s ORDER BY pullTime desc"
+        sql = "SELECT coordY, coordX, pullTime FROM sensorData WHERE bikeID = %s ORDER BY pullTime desc"
         vals = (int(bikeid),)
         self._mycursor.execute(sql, vals)
         result = self._mycursor.fetchall()
@@ -116,7 +116,15 @@ class Algo(object):
         self._mycursor.execute(sql, vals)
         self._mydb.commit()
 
-    def dbWrite_location(self, user, bikeID, coordX, coordY, accel, pullTime, con):
+    def get_bike_history(self, bikeID):
+        sql = "SELECT coordY, coordX, pullTime, clusterID FROM sensorData WHERE bikeID = %s ORDER BY pullTime desc"
+        vals = (int(bikeID),)
+        self._mycursor.execute(sql, vals)
+        result = self._mycursor.fetchall()
+        return result
+
+
+    def dbWrite_location(self, user, bikeID, coordY, coordX, accel, pullTime, con):
         sql = "INSERT INTO sensorData VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
         dataID = self.get_next_ID('d')
         dayInt = pullTime.weekday()
@@ -134,7 +142,7 @@ class Algo(object):
             day = 'Saturday'
         elif (dayInt == 6):
             day = 'Sunday'
-        val = (dataID, user, bikeID, -1,  coordX, coordY, accel, 0, pullTime, day, con)
+        val = (dataID, user, bikeID, -1,  coordY, coordX, accel, 0, pullTime, day, con)
         self._mycursor.execute(sql, val)
         self._mydb.commit()
 

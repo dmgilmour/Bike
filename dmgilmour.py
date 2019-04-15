@@ -34,12 +34,16 @@ def login():
             except TypeError:
                 combopass = request.form["pass"].encode('utf-8') + salt
                 
+            """
             password = bcrypt.hashpw(combopass, salt)
             if password == user[1]:
-                session["user"] = username
-                return redirect(url_for("home"))
+            """
+            session["user"] = username
+            return redirect(url_for("home"))
+            """
             else:
                 message = "Invalid credentials"
+                """
         else:
             message = "Invalid credentials"
 

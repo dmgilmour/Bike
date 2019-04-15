@@ -29,11 +29,10 @@ def login():
         if user != None:
             username = user[0]
             salt = user[2].encode('utf-8')
-            print(salt)
             try:
                 combopass = (request.form["pass"] + salt).encode('utf-8')
             except TypeError:
-                combopass = (request.form["pass"] + salt)
+                combopass = request.form["pass"].encode('utf-8') + salt
                 
             password = bcrypt.hashpw(combopass, salt)
             if password == user[1]:
@@ -60,7 +59,7 @@ def signup():
             username = request.form["user"]
 
         if algo.get_user(username) == None:
-            salt = bcrypt.gensalt()
+            salt = bcrypt.gensalt().encode('utf-8')
             try:
                 combopass = (request.form["pass"] + salt).encode('utf-8')
             except TypeError:

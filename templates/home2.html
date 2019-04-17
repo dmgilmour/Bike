@@ -216,30 +216,30 @@
 
 
       var map;
-      var userMarker;
+      var userMarkers;
       var bikeMarkers = [];
       var historyMarkers = [];
       
       var userIcon;
 
 
-
       function initMap() {
         console.log("init map");
         map = new google.maps.Map(document.getElementById('map'), {
-          zoom: 14,
-          center: {lat: 40.445, lng: -79.959053}
+          zoom: 9,
+          center: {lat: 40.43, lng: -79.94}
         });
 
+        console.log("ay");
         userIcon = {
-          url: "http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FFFFFF",
-          scaledSize: new google.maps.Size(21, 34),
+          url: "https://media2.giphy.com/media/l4hLSAA8qZk7Si3XW/source.gif",
+          scaledSize: new google.maps.Size(80,50)
           //origin: new google.maps.Point(0,0),
           //anchor: new google.maps.Point(0, 0)
         };
+        console.log("ay");
 
         getLocation();
-        retreiveLoc();
       }
 
 
@@ -294,16 +294,6 @@
         httpRequest.send();
       }
 
-
-      function sleep(milliseconds) {
-        var start = new Date().getTime();
-        for (var i = 0; i < 1e7; i++) {
-          if ((new Date().getTime() - start) > milliseconds){
-            break;
-          }
-        }
-      }
-
 // Color
       function colorHash(bike) {
         var color = (bike * 47) % 359;
@@ -351,12 +341,6 @@
       }
 // end Color
 
-      var revealed = 0;
-
-      function revealPoint() {
-        bikeMarkers[revealed].setMap(map);
-        revealed++;
-      }
 
       function clearBikeMarkers() {
         for (var i = 0; i < bikeMarkers.length; i++) {
@@ -384,24 +368,22 @@
             new google.maps.Size(21, 34),
             new google.maps.Point(0,0),
             new google.maps.Point(10, 34));
+        var datetime = new Date(parseInt(loc.time));
+        var infoWindow = new google.maps.InfoWindow({
+          content: datetime.toString() + "\n" + loc.lat + "\n" + loc.lon
+        });
 
      
+        var marker = new google.maps.Marker({
+          position: {lat: loc.lat, lng: loc.lon},
+          icon: pinImage,
+          map: map
+        });
 
-        if (loc.id == 25) {
-          bikeMarkers.push(new google.maps.Marker({
-            position: {lat: loc.lat, lng: loc.lon},
-            icon: pinImage,
-            map: null
-          }));
-        } else {
-          bikeMarkers.push(new google.maps.Marker({
-            position: {lat: loc.lat, lng: loc.lon},
-            icon: pinImage,
-            map: map
-          }));
-        }
-
-
+        google.maps.event.addListener(marker, 'click', function() {
+          infoWindow.open(map,marker);
+        });
+        bikeMarkers.push(marker);
       }
 
 
@@ -430,9 +412,6 @@
 
 
       function getLocation() {
-        if (userMarker != null) {
-          userMarker.setMap(null);
-        }
         console.log("Getting User Location");
         if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition(plotUser);
@@ -488,20 +467,16 @@
       }
 
 
+
       window.setInterval(function() {
         if (mode == 0) {
           console.log("Track Mode");
           retreiveLoc();
           getLocation();
+        } else {
+          console.log("History Mode");
         }
       }, 10000);
-
-      window.setInterval(function() {
-        if (mode == 1) {
-          console.log("History Mode");
-          revealPoint();
-        }
-      }, 300);
 
 
     </script>

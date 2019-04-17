@@ -87,7 +87,7 @@ def home():
         #time_boundary = datetime.datetime.now() - datetime.timedelta(minutes=1)
         #l = Location.query.filter(Location.time >= time_boundary)
 
-        return render_template("home.html")
+        return render_template("home2.html")
         # return render_template("home.html", bike_loc=bike_loc)
 
 @app.route("/register", methods = ["POST"])
@@ -224,39 +224,18 @@ def userdata():
         return redirect(url_for("home"))
 
 @app.route("/data/history/<bike>", methods = ["GET", "POST"])
-def history(bike, timeStart=0, timeEnd=0):
+def history(bike):
 
-    if request.method == "GET":
-        print("Getting History for Bike: ", bike)
-        loc_list = []
-        if bike != None:
-            loc_list = algo.get_bike_history(bike)
 
+    with open("../Locations2.json") as jfile:
+        data = json.load(jfile)
         new_list = []
-        last_loc = None
-        top_id = 0
-        if bike == '25':
-            with open('../Locations3.json') as jfile:
-                data = json.load(jfile)
-                i = 0
-                for loc in data:
-                    print(loc)
-                    if i > 2000:
-                        break
-                    new_list.append({'lat':loc['lat'], 'lon':loc['lon'], 'id':loc['cluster']})
-                    # new_list.append({'lat':loc['lat'] - 0.0013599, 'lon':loc['lon'] + 0.00256, 'id':loc['cluster']})
-                    i += 1
-        else:
-            for loc in loc_list:
-                if last_loc == None or loc[0] != last_loc[0] or loc[1] != last_loc[1]:
-                    # new_list.append({'lat':loc[1], 'lon':loc[0], 'id':-1})
-                    new_list.append({'lat':loc[1], 'lon':loc[0], 'id':loc[3]})
-                    # new_list.append({'lat':loc[1] - 0.00036, 'lon':loc[0] - 0.41344, 'time':loc['time']})
-                last_loc = loc
-
-
-        print(len(loc_list))
-        print(len(new_list))
+        for loc in data:
+            time = (datetime.datetime.fromtimestamp(int(loc['time'])//1000))
+            if time.day == 15:
+                new_list.append({'lat':loc['lat'] - 0.00036, 'lon':loc['lon'] - 0.41344, 'time':loc['time']})
+            # algo.dbWrite_location("ayyo", 25, loc['lat'] + 0.001, loc['lon'] - 0.416, 0, datetime.datetime.fromtimestamp(int(loc['time'])//1000), 0)
+        print("done")
 
 
 

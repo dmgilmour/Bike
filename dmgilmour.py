@@ -119,7 +119,11 @@ def trackdata():
                 loc = algo.ayyyyyyo(bike[0])
                 print(len(loc))
                 if len(loc) > 0:
-                    loc_list.append({'lat':loc[0][1], 'lon':loc[0][0], 'id':bike[0]})
+                    if bike[0] == 2:
+                        print("AAAAAA")
+                        loc_list.append({'lat':loc[0][0] + 0.00090099999, 'lon':loc[0][1] - 0.002812, 'id':bike[0]})
+                    else:
+                        loc_list.append({'lat':loc[0][1], 'lon':loc[0][0], 'id':bike[0]})
 
         print(loc_list)
         return json.dumps(loc_list)
@@ -248,6 +252,14 @@ def history(bike, timeStart=0, timeEnd=0):
                         break
                     new_list.append({'lat':loc['lat'], 'lon':loc['lon'], 'id':loc['cluster']})
                     # new_list.append({'lat':loc['lat'] - 0.0013599, 'lon':loc['lon'] + 0.00256, 'id':loc['cluster']})
+        if bike == "2":
+            print("AAAAAAA")
+            for loc in loc_list:
+                if last_loc == None or loc[0] != last_loc[0] or loc[1] != last_loc[1]:
+                    # new_list.append({'lat':loc[1], 'lon':loc[0], 'id':-1})
+                    new_list.append({'lat':loc[0], 'lon':loc[1], 'id':loc[3]})
+                    # new_list.append({'lat':loc[1] - 0.00036, 'lon':loc[0] - 0.41344, 'time':loc['time']})
+                last_loc = loc
         else:
             for loc in loc_list:
                 if last_loc == None or loc[0] != last_loc[0] or loc[1] != last_loc[1]:

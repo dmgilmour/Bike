@@ -240,12 +240,14 @@ def history(bike, timeStart=0, timeEnd=0):
                 data = json.load(jfile)
                 i = 0
                 for loc in data:
+                    i += 1
                     print(loc)
+                    if i < 150:
+                        continue
                     if i > 2000:
                         break
                     new_list.append({'lat':loc['lat'], 'lon':loc['lon'], 'id':loc['cluster']})
                     # new_list.append({'lat':loc['lat'] - 0.0013599, 'lon':loc['lon'] + 0.00256, 'id':loc['cluster']})
-                    i += 1
         else:
             for loc in loc_list:
                 if last_loc == None or loc[0] != last_loc[0] or loc[1] != last_loc[1]:

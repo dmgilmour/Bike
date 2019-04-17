@@ -251,7 +251,7 @@
           if (this.readyState == 4 && this.status == 200) {
             var myArr = JSON.parse(this.responseText);
             console.log("Succesfully retrieved location data from /data")
-            displayBikes(myArr);
+            displayBikes(myArr, 0);
           } else {
             console.log("Error retrieving location data from /data")
           }
@@ -267,7 +267,7 @@
           if (this.readyState == 4 && this.status == 200) {
             var myArr = JSON.parse(this.responseText);
             console.log("Succesfully retrieved location data from /data/history")
-            displayBikes(myArr);
+            displayBikes(myArr, bike);
           } else {
             console.log("Error retrieving location data from /data/history")
           }
@@ -365,17 +365,17 @@
         bikeMarkers = []
       }
 
-      function displayBikes(data) {
+      function displayBikes(data, bike) {
         console.log("Len: " + data.length);
         clearBikeMarkers();
         for (var i = 0; i < data.length; i++) {
           
           console.log(data[i]);
-          displayBike(data[i]);
+          displayBike(data[i], bike);
         }
       }
 
-      function displayBike(loc) {
+      function displayBike(loc, bike) {
         if (loc.lat == null || loc.lon == null) {
           return;
         }
@@ -387,7 +387,7 @@
 
      
 
-        if (loc.id == 25) {
+        if (bike == 25) {
           bikeMarkers.push(new google.maps.Marker({
             position: {lat: loc.lat, lng: loc.lon},
             icon: pinImage,

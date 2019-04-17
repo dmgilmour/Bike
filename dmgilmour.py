@@ -236,7 +236,7 @@ def history(bike, timeStart=0, timeEnd=0):
         last_loc = None
         top_id = 0
         if bike == '25':
-            with open('../Locations3.json') as jfile:
+            with open('Locations3.json') as jfile:
                 data = json.load(jfile)
                 i = 0
                 for loc in data:
